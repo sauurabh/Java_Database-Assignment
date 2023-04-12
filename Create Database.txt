@@ -1,1 +1,21 @@
+create table testData(id int ,from_num bigint,start_time datetime,end_time datetime);
+insert into testData values(1,99883344,'2023-04-11 06:24:34','2023-04-11 06:54:34');
+insert into testData values(2,89883344,'2023-04-11 06:00:34','2023-04-11 06:10:34');
+insert into testData values(3,79883344,'2023-04-12 07:00:34','2023-04-11 07:10:34');
+insert into testData values(4,69883344,'2023-04-13 08:00:00','2023-04-13 08:50:00');
 
+alter table testData add duration time;
+
+update testData set duration=end_time-start_time;
+
+--query for Hour of the day when the call volume is highest.
+select hour(start_time) AS HourOfDay,count(duration) AS TotalDuration from testData group By HourOfDay order By TotalDuration desc limit 1
+
+--query for Hour of the day when the calls are longest.
+select  hour(start_time) AS HourOfDay from testData where duration=(select max(duration) from testData)
+
+--query for Day of the week when the call volume is highest.
+select dayname(start_time) AS dayOfWeek,count(duration) AS TotalDuration from testData group By dayOfWeek order By TotalDuration desc limit 1
+
+--query for Day of the week when the calls are longest.
+select dayname(start_time) AS dayOfweek from testData where duration=(select max(duration) from testData) 
